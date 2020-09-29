@@ -66,11 +66,6 @@ ansible dev -m setup -a 'filter=ansible_distribution' -i devhosts
 
 
 
- ### Examples:
-
- 1. useradd.yaml - this playbook adds 2 users to "dev" group of managed servers.
- 2. addfile.yaml - this playbook creates an empty file "ansible1" under "/tmp" folder
- 3. add-ansible-user.yaml - adds admin user to perform ansible tasks
- 4. 
+ 
  
 
