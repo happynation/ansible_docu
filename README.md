@@ -58,6 +58,27 @@ ansible dev -m shell -a "uname -a"
 ```
 ansible dev -m setup -a 'filter=ansible_distribution' -i devhosts
 ```
+```
+ansible dev -i inventory -b -m yum -a "name=elinks state=latest""
+```
+```
+ansible dev -i inventory -m file -a "path=/home/centos/newfile  state=touch"
+```
+```
+ansible dev -i inventory -m file -a "path=/home/centos/newfile mode=0400 "
+```
+```
+ansible dev -i inventory -b -m file -a "path=/home/centos/newfile owner=root "
+```
+```
+ansible dev -i inventory -b -m user -a "name=vova"
+```
+```
+ansible dev -i inventory -b -m user -a "name=vova append=yes groups=wheel"
+```
+
+
+
 
 ---
  ### Ansible Playbooks
