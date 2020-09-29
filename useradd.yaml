@@ -1,12 +1,12 @@
 - hosts: dev
+  become: yes
   tasks:
-    - name: add user bob
+    - name: create users
       user:
-        name: bob
+        name: "{{item}}"
         state: present
-    
-    - name: add user anna
-      user:
-        name: anna
-        state: present
+      with_items:
+        - sam
+        - bob
+        - anna
 
