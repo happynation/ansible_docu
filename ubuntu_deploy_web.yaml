@@ -1,0 +1,48 @@
+- hosts: ubuntu
+  tasks:
+    - name: Install all dependencies
+      apt: name={{ item }}  state=installed
+      with_items:
+        - "python"
+        - "python-setuptools"
+        - "python-dev"
+        - "build-essential"
+        - "python pip"
+
+    - name: Install MYSQL database
+      apt: name={{ item }}  state=installed
+      with_items:
+        - "mysql-server"
+        - "mysql-client"
+
+    - name: Start MySQL Service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create application Database
+      mysql_db: name=employee_db state=present
+
+    - name: Create Database user
+      mysql_user:
+        name: db_user
+        password: Password
+        priv: '*.*:ALLE'
+        state: present
+        host: '%'
+
+    - name: Install Python Flask dependency
+      pip:
+        name: {{ item }}
+        state: present
+      with_items:
+        - "flask"
+        - "flask-mysql"
+
+    - name: Copy source code
+      copy: src=app.py dest=/opt/app.py
+
+    - name: start webserver
+      shell: FLASK_APP=/opt/app.py nohup flask run --host=0.0.0.0 &
+        

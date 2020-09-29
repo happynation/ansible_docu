@@ -1,0 +1,13 @@
+- hosts: dev
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Run Shell Command
+      shell:
+        cmd: ls
+        chdir: /root
+      register: output
+
+    - debug:
+        msg: "{{output.stdout}}"

@@ -1,0 +1,7 @@
+- hosts: localhost
+  tasks:
+    - name: Insert/Update configuration using a local file and validate it
+      blockinfile:
+        block: "{{ lookup('file', './ansiblecfg.txt') }}"
+        dest: /etc/ansible/ansible.cfg
+        

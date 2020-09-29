@@ -1,0 +1,12 @@
+- name: Add the user with a specific uid and a primary group of 'admin'
+  user:
+    name: "{{ name }}"
+    comment: John Doe
+    uid: "{{ uid }}"
+    group: admin
+
+- name: Set authorized key taken from file
+  authorized_key:
+    user: "{{ name }}"
+    state: present
+    key: "{{ lookup('file', './keys/vovakey') }}"

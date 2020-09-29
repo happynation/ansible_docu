@@ -1,0 +1,33 @@
+- hosts: dev
+  tasks:
+
+    - name: Install a .deb package from the internet
+      apt:
+        deb: https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.4.2-amd64.deb
+
+    
+    - name: Copy config
+      copy: 
+        src: metricbeat.conf 
+        dest: /etc/metricbeat/metricbeat.yml
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+ 
+    - name: Force systemd to reread configs
+      systemd: 
+        daemon_reload: yes
+
+    - name: enable system module
+      become: true
+      shell: metricbeat modules enable system
+ 
+    - name: Enable metricbeat.service
+      systemd:
+        name: metricbeat.service
+        enabled: yes
+ 
+    - name: Start metricbeat.service
+      systemd: 
+        name: metricbeat.service 
+        state: restarted

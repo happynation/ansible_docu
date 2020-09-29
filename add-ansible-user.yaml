@@ -1,0 +1,32 @@
+- hosts: dev
+  remote_user: root
+  tasks:
+    # Add Ansible user to Centos servers
+    - name: Add Ansible users to Centos
+      when: ansible_facts['distribution'] == "RedHat"
+      user:
+        name: ansible
+        comment: Ansible user to execute ansible tasks
+        group: wheel
+
+    # Add ansible user to ubuntu servers
+
+    - name: Add group admin to Ubuntu
+      when: ansible_facts['distribution'] == "Debian"
+      group:
+        name: admin
+        state: present  
+        
+    
+    - name: Add Ansible users to Ubuntu
+      when: ansible_facts['distribution'] == "Debian"
+      user:
+        name: ansible
+        comment: Ansible user to execute ansible tasks
+        group: admin
+    
+    - name: Set authorized key taken from file
+      authorized_key:
+        user: ansible
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/vova_id_rsa.pub') }}"

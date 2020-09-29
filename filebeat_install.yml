@@ -1,0 +1,36 @@
+- hosts: dev
+  tasks:
+
+    - name: Install a .deb package from the internet
+      apt:
+        deb: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.4.2-amd64.deb
+    
+    - name: Copy config
+      copy: 
+        src: filebeat.conf 
+        dest: /etc/filebeat/filebeat.yml
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+ 
+    - name: Force systemd to reread configs
+      systemd: 
+        daemon_reload: yes
+
+    - name: enable system module
+      become: true
+      shell: filebeat modules enable system
+ 
+    - name: Enable filebeat.service
+      systemd:
+        name: filebeat.service
+        enabled: yes
+ 
+    - name: Start filebeat.service
+      systemd: 
+        name: filebeat.service 
+        state: restarted
+        
+
+    
+      

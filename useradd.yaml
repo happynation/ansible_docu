@@ -1,0 +1,12 @@
+- hosts: dev
+  tasks:
+    - name: add user bob
+      user:
+        name: bob
+        state: present
+    
+    - name: add user anna
+      user:
+        name: anna
+        state: present
+

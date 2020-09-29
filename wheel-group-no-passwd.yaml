@@ -1,0 +1,20 @@
+- hosts: dev
+  remote_user: root
+  tasks:
+  - name: Validate the sudoers file before saving (RedHat)
+    when: ansible_facts['distribution'] == "RedHat"
+    lineinfile:
+      path: /etc/sudoers
+      state: present
+      regexp: '^%wheel ALL='
+      line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+      validate: /usr/sbin/visudo -cf %s
+
+  - name: Validate the sudoers file before saving (Ubuntu)
+    when: ansible_facts['distribution'] == "Debian"
+    lineinfile:
+      path: /etc/sudoers
+      state: present
+      regexp: '^%admin ALL='
+      line: '%admin ALL=(ALL) NOPASSWD: ALL'
+      validate: /usr/sbin/visudo -cf %s
