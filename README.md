@@ -1,4 +1,4 @@
-# Ansible Class
+# Ansible
 ![Ansible](/images/Ansible-Logo-720x210.png)
 
 ___
