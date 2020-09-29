@@ -58,21 +58,27 @@ ansible dev -m shell -a "uname -a"
 ```
 ansible dev -m setup -a 'filter=ansible_distribution' -i devhosts
 ```
+6. Install elink
 ```
 ansible dev -i inventory -b -m yum -a "name=elinks state=latest""
 ```
+7. add file
 ```
 ansible dev -i inventory -m file -a "path=/home/centos/newfile  state=touch"
 ```
+8. add file & spec permission
 ```
 ansible dev -i inventory -m file -a "path=/home/centos/newfile mode=0400 "
 ```
+9. add file & spec owner
 ```
 ansible dev -i inventory -b -m file -a "path=/home/centos/newfile owner=root "
 ```
+10. add user
 ```
 ansible dev -i inventory -b -m user -a "name=vova"
 ```
+11. add user to group
 ```
 ansible dev -i inventory -b -m user -a "name=vova append=yes groups=wheel"
 ```
