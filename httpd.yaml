@@ -1,0 +1,15 @@
+- hosts: '{{ my_host }}'
+  become: yes
+  tasks:
+    - name: Insert/Update httpd.cfg
+      blockinfile:
+        path: /etc/httpd/conf/httpd.conf
+        block: |
+          LoadModule  rewrite_module  " /usr/lib64/httpd/modules/mod_rewrite.so "
+          RewriteEngine On
+          RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+          RewriteRule .* - [F]
+    - name: Restart service httpd
+      service:
+        name: httpd
+        state: restarted
