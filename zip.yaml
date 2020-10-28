@@ -1,0 +1,50 @@
+- hosts: test
+  become: yes
+  tasks:
+    - name: Compress directory contents
+      archive: path={{ item }} dest={{ item }}.tar.gz format=gz
+      with_items:
+        - "/opt/tomcat/webapps/docs"
+        - "/opt/tomcat/webapps/examples"
+        - "/opt/tomcat/webapps/ROOT"
+    - name: Recursively remove directory
+      file: path={{ item }} state=absent
+      with_items:
+        - "/opt/tomcat/webapps/docs"
+        - "/opt/tomcat/webapps/examples"
+        - "/opt/tomcat/webapps/ROOT"
+    - name: Create a directory if it does not exist
+      file:
+        path: /opt/tomcat/webapps/ROOT
+        state: directory
+        owner: tomcat
+        group: tomcat
+        mode: u=rwx,g=rx,o=-
+    - name: Copy config
+      copy: 
+        src: error.jsp 
+        dest: /opt/tomcat/webapps/ROOT/error.jsp
+        owner: tomcat
+        group: tomcat
+        mode: u=rw,g=r,o=-
+    - name: Insert/Update HTML surrounded by custom markers after <body> line
+      blockinfile:
+        path: /opt/tomcat/conf/web.xml
+        block: |
+          <error-page> 
+          <error-code>404</error-code> 
+          <location>/error.jsp</location>
+          </error-page>
+          <error-page> 
+          <error-code>403</error-code> 
+          <location>/error.jsp</location>
+          </error-page>
+          <error-page> 
+          <error-code>500</error-code> 
+          <location>/error.jsp</location>
+          </error-page>
+        insertbefore: "^</web"
+    - name: Restart service
+      service:
+        name: tomcat
+        state: restarted
