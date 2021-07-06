@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+     - shell: uptime
+       register: uptime_result
+       
+     - debug: var=uptime_result.stdout
